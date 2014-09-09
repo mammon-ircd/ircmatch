@@ -24,13 +24,18 @@
 static PyObject *
 ircmatch_collapse (PyObject * self, PyObject * args)
 {
-	char * pattern, * result;
+	char * pattern, * copy, * result;
+	PyObject * ret;
 
 	if (! PyArg_ParseTuple (args, "s", & pattern))
 		return NULL;
 
-	result = collapse (pattern);
-	return Py_BuildValue ("s", result);
+	copy = strdup (pattern);
+	result = collapse (copy);
+	ret = Py_BuildValue ("s", result);
+	free(result);
+
+	return ret;
 }
 
 static PyObject *
