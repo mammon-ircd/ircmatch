@@ -102,27 +102,15 @@ static PyMethodDef ircmatch_methods[] = {
 
 #if PY_MAJOR_VERSION >= 3
 
-static int ircmatch_traverse (PyObject *m, visitproc visit, void *arg)
-{
-	Py_VISIT (GETSTATE(m)->error);
-	return 0;
-}
-
-static int ircmatch_clear (PyObject *m)
-{
-	Py_CLEAR (GETSTATE(m)->error);
-	return 0;
-}
-
 static struct PyModuleDef ircmatch_moduledef = {
 	PyModuleDef_HEAD_INIT,
 	"ircmatch",
 	NULL,
-	sizeof(struct module_state),
+	0,
 	ircmatch_methods,
 	NULL,
-	ircmatch_traverse,
-	ircmatch_clear,
+	NULL,
+	NULL,
 	NULL
 };
 
