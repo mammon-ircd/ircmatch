@@ -2,7 +2,7 @@ from distutils.core import setup, Extension
 
 setup (
     name='ircmatch',
-    version='1.0',
+    version='1.1',
     ext_modules=[Extension('ircmatch', ['ircmatch.c', 'ircmatch_python.c'])],
     description='library for matching IRC masks based on atheme',
     author='William Pitcock',
