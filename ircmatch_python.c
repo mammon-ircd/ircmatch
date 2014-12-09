@@ -100,8 +100,44 @@ static PyMethodDef ircmatch_methods[] = {
 	  "   len: length" },
 };
 
+#if PY_MAJOR_VERSION >= 3
+
+static int ircmatch_traverse (PyObject *m, visitproc visit, void *arg)
+{
+	Py_VISIT (GETSTATE(m)->error);
+	return 0;
+}
+
+static int ircmatch_clear (PyObject *m)
+{
+	Py_CLEAR (GETSTATE(m)->error);
+	return 0;
+}
+
+static struct PyModuleDef ircmatch_moduledef = {
+	PyModuleDef_HEAD_INIT,
+	"ircmatch",
+	NULL,
+	sizeof(struct module_state),
+	ircmatch_methods,
+	NULL,
+	ircmatch_traverse,
+	ircmatch_clear,
+	NULL
+};
+
+PyObject *
+PyInit_ircmatch (void)
+{
+	return PyModule_Create (& ircmatch_moduledef);
+}
+
+#else
+
 PyMODINIT_FUNC
 initircmatch (void)
 {
-	Py_InitModule("ircmatch", ircmatch_methods);
+	Py_InitModule ("ircmatch", ircmatch_methods);
 }
+
+#endif
