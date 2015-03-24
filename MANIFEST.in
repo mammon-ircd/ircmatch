@@ -1,2 +1,3 @@
 include README.md
 include example.py
+include ircmatch.h
