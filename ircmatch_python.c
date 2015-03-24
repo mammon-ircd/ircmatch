@@ -98,6 +98,7 @@ static PyMethodDef ircmatch_methods[] = {
 	  "   s1: first string\n"
 	  "   s2: second string\n"
 	  "   len: length" },
+	{ NULL, NULL, 0, NULL },
 };
 
 #if PY_MAJOR_VERSION >= 3
