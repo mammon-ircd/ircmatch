@@ -80,26 +80,39 @@ ircmatch_ircncasecmp (PyObject * self, PyObject * args)
 static PyMethodDef ircmatch_methods[] = {
 	{ "collapse", ircmatch_collapse, METH_VARARGS,
 	  "Collapse a mask to the simplest possible equivilant representation. Arguments are:\n"
-          "   mask: the mask to collapse." },
+	  "   mask: the mask to collapse." },
 	{ "match", ircmatch_match, METH_VARARGS,
 	  "Matches a mask against a target.  Arguments are:\n"
-	  "   match_mapping: 0 means rfc1459, 1 means ascii.\n"
+	  "   match_mapping: casemapping to use, either ircmatch.rfc1459 or ircmatch.ascii\n"
 	  "   mask: the mask to match against\n"
 	  "   target: the target to match the mask against" },
 	{ "irccasecmp", ircmatch_irccasecmp, METH_VARARGS,
 	  "Performs a lexographical string comparison against two strings.  Arguments are:\n"
-	  "   match_mapping: 0 means rfc1459, 1 means ascii.\n"
+	  "   match_mapping: casemapping to use, either ircmatch.rfc1459 or ircmatch.ascii\n"
 	  "   s1: first string\n"
 	  "   s2: second string" },
 	{ "ircncasecmp", ircmatch_ircncasecmp, METH_VARARGS,
 	  "Performs a lexographical string comparison against two strings up to a maximum specified length.\n"
 	  "Arguments are:\n"
-	  "   match_mapping: 0 means rfc1459, 1 means ascii.\n"
+	  "   match_mapping: casemapping to use, either ircmatch.rfc1459 or ircmatch.ascii\n"
 	  "   s1: first string\n"
 	  "   s2: second string\n"
 	  "   len: length" },
 	{ NULL, NULL, 0, NULL },
 };
+
+PyObject *rfc1459_casemap;
+PyObject *ascii_casemap;
+
+void
+add_casemaps ( PyObject * mod )
+{
+	rfc1459_casemap = Py_BuildValue("i", 0);
+	PyModule_AddObject(mod, "rfc1459", rfc1459_casemap);
+
+	ascii_casemap = Py_BuildValue("i", 1);
+	PyModule_AddObject(mod, "ascii", ascii_casemap);
+}
 
 #if PY_MAJOR_VERSION >= 3
 
@@ -118,7 +131,11 @@ static struct PyModuleDef ircmatch_moduledef = {
 PyObject *
 PyInit_ircmatch (void)
 {
-	return PyModule_Create (& ircmatch_moduledef);
+	PyObject *module = PyModule_Create (& ircmatch_moduledef);
+
+	add_casemaps(module);
+
+	return module;
 }
 
 #else
@@ -126,7 +143,9 @@ PyInit_ircmatch (void)
 PyMODINIT_FUNC
 initircmatch (void)
 {
-	Py_InitModule ("ircmatch", ircmatch_methods);
+	PyObject *module = Py_InitModule ("ircmatch", ircmatch_methods);
+
+	add_casemaps(module);
 }
 
 #endif
