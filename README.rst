@@ -12,7 +12,7 @@ Usage
 
     import ircmatch
 
-    print ircmatch.match(0, 'kaniini!*@*', 'kaniini!~kaniini@localhost')
+    print ircmatch.match(ircmatch.rfc1459, 'kaniini!*@*', 'kaniini!~kaniini@localhost')
 
 See also ``help(ircmatch)`` and ``example.py`` in this source
 distribution.
